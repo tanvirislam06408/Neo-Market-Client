@@ -1,13 +1,17 @@
-'use client'
-import { useParams } from 'next/navigation';
+
+import ProductDetailsPage from '@/components/shared/ProductDetails';
+import { serverFetch } from '@/lib/core/serverfetch';
 import React from 'react';
 
-const ProductDetails = ({params}) => {
-    const {id}=useParams();
+const ProductDetails = async ({ params }) => {
+    const { id } = await params;
+
+    const productDetails = await serverFetch(`/api/product/${id}`)
+    console.log(productDetails.title);
     
     return (
         <div>
-            {id}
+           <ProductDetailsPage product={productDetails}/>
         </div>
     );
 };
