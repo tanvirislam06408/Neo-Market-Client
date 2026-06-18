@@ -1,5 +1,5 @@
 import ProductCard from "@/components/shared/ProductCard";
-import { serverFetch } from "@/lib/core/serverfetch";
+import { serverFetch } from "@/lib/core/server";
 
 
 export default async function ProductsPage() {

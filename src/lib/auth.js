@@ -28,8 +28,8 @@ emailAndPassword: {
       role:{
         defaultValue:'buyer'
       },
-      plan:{
-        defaultValue:'free'
+      status:{
+        defaultValue:'active'
       }
     }
   }

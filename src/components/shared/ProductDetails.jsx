@@ -3,7 +3,6 @@ import { Heart, ShoppingCart, ShieldCheck, Phone, User, Mail } from "lucide-reac
 import { Button } from "@/components/ui/button";
 
 export default function ProductDetailsPage({ product }) {
-  console.log(product);
 
   // Guard clause if the product data hasn't loaded or passed yet
   if (!product) {
@@ -69,10 +68,19 @@ export default function ProductDetailsPage({ product }) {
 
           {/* Action Buttons */}
           <div className="flex gap-4">
-            <Button size="lg" className="flex-1 rounded-full text-base font-medium">
+            
+
+            <form className="w-full" action="/api/checkout_sessions" method="POST">
+              <input
+                type="hidden"
+                name="productId"
+                value={product._id}
+              />
+              <Button type="submit" size="lg" className="flex-1 w-full rounded-full text-base font-medium">
               <ShoppingCart className="mr-2 h-5 w-5" />
               Buy Now
             </Button>
+            </form>
             <Button size="lg" variant="outline" className="rounded-full px-4">
               <Heart className="h-5 w-5" />
             </Button>

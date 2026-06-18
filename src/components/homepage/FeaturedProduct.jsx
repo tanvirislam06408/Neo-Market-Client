@@ -2,43 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Sparkles, ArrowUpRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { serverFetch } from "@/lib/core/server";
 
-const products = [
-  {
-    id: 1,
-    name: "Canonatic M1 Film Camera",
-    location: "Portland, OR • Elena S.",
-    price: 120,
-    condition: "LIKE NEW",
-    image: "https://picsum.photos/500/500?random=11",
-  },
-  {
-    id: 2,
-    name: "Solid Oak Task Lamp",
-    location: "Austin, TX • Marcus K.",
-    price: 45,
-    condition: "GOOD",
-    image: "https://picsum.photos/500/500?random=12",
-  },
-  {
-    id: 3,
-    name: "TKL Mechanical Keyboard",
-    location: "Brooklyn, NY • Sarah J.",
-    price: 85,
-    condition: "MINT",
-    image: "https://picsum.photos/500/500?random=13",
-  },
-  {
-    id: 4,
-    name: "Cognac Leather Weekender",
-    location: "Chicago, IL • David L.",
-    price: 160,
-    condition: "FAIR",
-    image: "https://picsum.photos/500/500?random=14",
-  },
-];
 
-export default function FeaturedProducts() {
+export default async function FeaturedProducts() {
+  const products= await serverFetch('/api/featuredProduct');
   return (
     <section className="py-24">
       <div className="container mx-auto px-4">
@@ -67,55 +35,79 @@ export default function FeaturedProducts() {
         </div>
 
         {/* Cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <Card
-              key={product.id}
-              className="overflow-hidden rounded-[32px] border-0 bg-transparent shadow-none group cursor-pointer"
+       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+  {products.map((product) => (
+    <Card
+      key={product._id}
+      className="overflow-hidden rounded-[32px] border-0 bg-transparent shadow-none group"
+    >
+      <CardContent className="p-2">
+        <Link href={`/products/${product._id}`}>
+          <div className="relative overflow-hidden rounded-[32px] bg-[#ECEAE5] shadow-sm transition-all duration-300 group-hover:shadow-md">
+            {/* Condition Badge */}
+            <div className="absolute left-4 top-4 z-10 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-bold tracking-wide text-[#3E5F47] shadow-sm">
+              {product.condition}
+            </div>
+
+            {/* Category Badge */}
+            <div className="absolute right-4 bottom-4 z-10 rounded-full bg-[#3E5F47] px-3 py-1 text-xs font-medium text-white">
+              {product.category}
+            </div>
+
+            <Image
+              src={product.images?.[0]}
+              alt={product.title}
+              width={500}
+              height={500}
+              className="aspect-square w-full object-cover transition duration-700 group-hover:scale-110"
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            <div className="absolute right-4 top-4 translate-x-4 -translate-y-4 rounded-full bg-white/90 p-2 opacity-0 backdrop-blur-sm shadow-sm transition-all duration-500 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
+              <ArrowUpRight className="h-5 w-5 text-[#3E5F47]" />
+            </div>
+          </div>
+        </Link>
+
+        <div className="mt-5 flex items-start justify-between gap-4 px-2">
+          <div className="flex-1">
+            <h3 className="line-clamp-1 text-lg font-semibold text-foreground transition-colors group-hover:text-[#3E5F47]">
+              {product.title}
+            </h3>
+
+            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+              {product.description}
+            </p>
+
+            <div className="mt-3 text-xs text-muted-foreground">
+              Sold by{" "}
+              <span className="font-medium text-[#3E5F47]">
+                {product.sellerInfo.name}
+              </span>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <span className="block text-xl font-bold text-[#3E5F47]">
+              ৳{product.price.toLocaleString()}
+            </span>
+
+            <span
+              className={`mt-2 inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                product.status === "available"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
             >
-              <CardContent className="p-2">
-                <div className="relative overflow-hidden rounded-[32px] bg-[#ECEAE5] shadow-sm transition-all duration-300 group-hover:shadow-md">
-                  {/* Badge */}
-                  <div className="absolute left-4 top-4 z-10 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-bold tracking-wide text-[#3E5F47] shadow-sm">
-                    {product.condition}
-                  </div>
-
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={500}
-                    height={500}
-                    className="aspect-square w-full object-cover transition  duration-700 group-hover:scale-110"
-                  />
-                  
-                  {/* Inner shadow/overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  
-                  {/* Hover icon */}
-                  <div className="absolute right-4 top-4 translate-x-4 -translate-y-4 rounded-full bg-white/90 p-2 opacity-0 backdrop-blur-sm shadow-sm transition-all duration-500 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
-                    <ArrowUpRight className="h-5 w-5 text-[#3E5F47]" />
-                  </div>
-                </div>
-
-                <div className="mt-5 flex items-start justify-between gap-4 px-2">
-                  <div>
-                    <h3 className="text-xl font-semibold text-foreground transition-colors group-hover:text-[#3E5F47]">
-                      {product.name}
-                    </h3>
-
-                    <p className="mt-1.5 text-sm text-muted-foreground">
-                      {product.location}
-                    </p>
-                  </div>
-
-                  <span className="text-xl font-bold text-[#3E5F47]">
-                    ${product.price}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+              {product.status}
+            </span>
+          </div>
         </div>
+      </CardContent>
+    </Card>
+  ))}
+</div>
 
         {/* Mobile Button */}
         <div className="mt-10 flex justify-center md:hidden">

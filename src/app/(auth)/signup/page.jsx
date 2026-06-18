@@ -56,7 +56,7 @@ const SignUpPage = () => {
     }
 
     try {
-      const {data : session, error: apiError} = await authClient.signUp.email({ name, email, password, role: roleState, plan: 'free' });
+      const {data : session, error: apiError} = await authClient.signUp.email({ name, email, password, role: roleState, status:'active' });
       if (apiError) {
         setError(apiError.message || "An error occurred during sign up.");
         return;

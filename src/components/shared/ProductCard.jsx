@@ -55,10 +55,17 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="flex gap-3">
-          <Button className="flex-1 rounded-full">
-            <ShoppingCart className="mr-2 h-4 w-4" />
-            Buy Now
-          </Button>
+           <form className="w-full" action="/api/checkout_sessions" method="POST">
+              <input
+                type="hidden"
+                name="productId"
+                value={product._id}
+              />
+              <Button type="submit" size="lg" className="flex-1 w-full rounded-full text-base font-medium">
+              <ShoppingCart className="mr-2 h-5 w-5" />
+              Buy Now
+            </Button>
+            </form>
 
           <Button
             size="icon"
