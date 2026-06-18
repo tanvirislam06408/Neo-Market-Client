@@ -1,4 +1,4 @@
-"use client";
+
 
 import Link from "next/link";
 import {
@@ -13,28 +13,131 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import {
+  LayoutDashboard,
+  Package,
+  Heart,
+  CreditCard,
+  User,
+  PlusCircle,
+  ShoppingCart,
+  BarChart3,
+  Users,
+  ShieldCheck,
+} from "lucide-react";
 import Logo from "../shared/Logo";
+import { getUserSession } from "@/lib/core/session";
 
-const items = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    title: "Profile",
-    url: "/dashboard/profile",
-  },
-  {
-    title: "Settings",
-    url: "/dashboard/settings",
-  },
-];
 
-export function DashboardSidebar() {
+
+const navItems = {
+  buyer: [
+    {
+      name: "Dashboard",
+      path: "/dashboard/buyer",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "My Orders",
+      path: "/dashboard/buyer/orders",
+      icon: Package,
+    },
+    {
+      name: "Wishlist",
+      path: "/dashboard/buyer/wishlist",
+      icon: Heart,
+    },
+    {
+      name: "Payment History",
+      path: "/dashboard/buyer/payments",
+      icon: CreditCard,
+    },
+    {
+      name: "Profile",
+      path: "/dashboard/buyer/profile",
+      icon: User,
+    },
+  ],
+
+  seller: [
+    {
+      name: "Dashboard",
+      path: "/dashboard/seller",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "Add Product",
+      path: "/dashboard/seller/add-product",
+      icon: PlusCircle,
+    },
+    {
+      name: "My Products",
+      path: "/dashboard/seller/products",
+      icon: Package,
+    },
+    {
+      name: "Manage Orders",
+      path: "/dashboard/seller/orders",
+      icon: ShoppingCart,
+    },
+    {
+      name: "Sales Analytics",
+      path: "/dashboard/seller/analytics",
+      icon: BarChart3,
+    },
+    {
+      name: "Profile",
+      path: "/dashboard/seller/profile",
+      icon: User,
+    },
+  ],
+
+  admin: [
+    {
+      name: "Dashboard",
+      path: "/dashboard/admin",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "Manage Users",
+      path: "/dashboard/admin/users",
+      icon: Users,
+    },
+    {
+      name: "Manage Products",
+      path: "/dashboard/admin/products",
+      icon: Package,
+    },
+    {
+      name: "Manage Orders",
+      path: "/dashboard/admin/orders",
+      icon: ShoppingCart,
+    },
+    {
+      name: "Platform Analytics",
+      path: "/dashboard/admin/analytics",
+      icon: BarChart3,
+    },
+    {
+      name: "Profile",
+      path: "/dashboard/admin/profile",
+      icon: User,
+    },
+  ],
+};
+
+
+
+
+export async function DashboardSidebar() {
+
+
+  const user = await getUserSession()
+  const items = navItems[user?.role]
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-        <h2 className="text-xl font-bold"><Logo/></h2>
+        <h2 className="text-xl font-bold"><Logo /></h2>
       </SidebarHeader>
 
       <SidebarContent>
@@ -44,9 +147,12 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>{item.title}</Link>
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild tooltip={item.name}>
+                    <Link href={item.path}>
+                      <item.icon />
+                      <span>{item.name}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
