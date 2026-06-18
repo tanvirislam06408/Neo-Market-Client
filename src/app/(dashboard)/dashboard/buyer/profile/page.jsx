@@ -19,10 +19,14 @@ import { Button } from "@/components/ui/button";
 import { getUserSession } from "@/lib/core/session";
 import { Separator } from "@/components/ui/separator";
 import { Camera, Save, Lock, ShieldCheck } from "lucide-react";
+import ProfileInfo from "@/components/dashboard/ProfileInfo";
 
 export default async function ProfilePage() {
   const user = await getUserSession();
+
   
+
+
   // Fallback initials
   const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : "U";
 
@@ -58,7 +62,7 @@ export default async function ProfilePage() {
                 {user?.role === 'admin' && <ShieldCheck className="w-3.5 h-3.5 text-primary" />}
                 <span className="capitalize">{user?.role || "Buyer"} Account</span>
               </p>
-              
+
               <div className="w-full mt-6 space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Status</span>
@@ -79,41 +83,7 @@ export default async function ProfilePage() {
         {/* Main Content */}
         <div className="md:col-span-2 space-y-6">
           {/* Profile Info */}
-          <Card className="border-border/50 shadow-sm">
-            <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
-              <CardDescription>
-                Update your personal details here.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" defaultValue={user?.name || "Tanvir Hossain"} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" defaultValue={user?.email || "user@example.com"} disabled className="bg-muted/50" />
-                  <p className="text-[10px] text-muted-foreground mt-1">Email cannot be changed directly.</p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" defaultValue="+880 1712345678" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="address">Address</Label>
-                  <Input id="address" defaultValue="Dhaka, Bangladesh" />
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="bg-muted/20 px-6 py-4 flex justify-end border-t">
-              <Button className="gap-2">
-                <Save className="w-4 h-4" />
-                Save Changes
-              </Button>
-            </CardFooter>
-          </Card>
+          <ProfileInfo user={user}/>
 
           {/* Change Password */}
           <Card className="border-border/50 shadow-sm">

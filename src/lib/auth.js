@@ -30,6 +30,12 @@ emailAndPassword: {
       },
       status:{
         defaultValue:'active'
+      },
+      phone:{
+        defaultValue:'01000000000'
+      },
+      address:{
+        defaultValue:'Dhaka/Bangladesh'
       }
     }
   }
