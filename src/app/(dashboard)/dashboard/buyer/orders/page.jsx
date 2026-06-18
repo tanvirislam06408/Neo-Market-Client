@@ -9,50 +9,35 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getUserSession } from "@/lib/core/session";
+import { serverFetch } from "@/lib/core/server";
 
-const orders = [
-  {
-    id: "#ORD-1001",
-    product: "Sony WH-1000XM5",
-    amount: "$280",
-    date: "2026-06-15",
-    status: "Pending",
-  },
-  {
-    id: "#ORD-1002",
-    product: "Mechanical Keyboard",
-    amount: "$90",
-    date: "2026-06-10",
-    status: "Accepted",
-  },
-  {
-    id: "#ORD-1003",
-    product: "Office Chair",
-    amount: "$140",
-    date: "2026-06-02",
-    status: "Cancelled",
-  },
-];
+export default async function MyOrdersPage() {
+  const user = await getUserSession();
 
-export default function MyOrdersPage() {
+  const orders = await serverFetch(
+    `/api/orders?userId=${user.id}`
+  );
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">My Orders</h1>
 
-        <p className="text-muted-foreground mt-2">
+        <p className="mt-2 text-muted-foreground">
           Track and manage your orders.
         </p>
       </div>
 
-      <div className="rounded-xl border">
+      <div className="rounded-xl border overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Order ID</TableHead>
+              <TableHead>Product ID</TableHead>
               <TableHead>Product</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Amount</TableHead>
+              <TableHead>Seller</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Payment</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">
                 Actions
@@ -62,26 +47,40 @@ export default function MyOrdersPage() {
 
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell>{order.id}</TableCell>
+              <TableRow key={order._id}>
+                <TableCell className="font-medium">
+                  {order.productId.slice(0, 12)}...
+                </TableCell>
 
-                <TableCell>{order.product}</TableCell>
+                <TableCell>
+                  {order.productName}
+                </TableCell>
 
-                <TableCell>{order.date}</TableCell>
+                <TableCell>
+                  {order.sellerInfo.name}
+                </TableCell>
 
-                <TableCell>{order.amount}</TableCell>
+                <TableCell>
+                  ৳{order.price.toLocaleString()}
+                </TableCell>
+
+                <TableCell>
+                  <Badge className="bg-green-600 hover:bg-green-600">
+                    {order.paymentStatus}
+                  </Badge>
+                </TableCell>
 
                 <TableCell>
                   <Badge
                     variant={
-                      order.status === "Accepted"
+                      order.orderStatus === "delivered"
                         ? "default"
-                        : order.status === "Pending"
+                        : order.orderStatus === "processing"
                         ? "secondary"
                         : "destructive"
                     }
                   >
-                    {order.status}
+                    {order.orderStatus}
                   </Badge>
                 </TableCell>
 
@@ -90,7 +89,7 @@ export default function MyOrdersPage() {
                     Details
                   </Button>
 
-                  {order.status === "Pending" && (
+                  {order.orderStatus === "processing" && (
                     <Button variant="destructive">
                       Cancel
                     </Button>

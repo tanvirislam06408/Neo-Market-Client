@@ -1,4 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { serverFetch } from "@/lib/core/server";
+import { getUserSession } from "@/lib/core/session";
 import { Package, Heart, ShoppingBag } from "lucide-react";
 
 const stats = {
@@ -24,7 +26,11 @@ const recentPurchases = [
   },
 ];
 
-export default function BuyerDashboardOverview() {
+export default async function BuyerDashboardOverview() {
+  const user=await getUserSession();
+  const orders = await serverFetch(`/api/orders?userId=${user.id}`);
+  
+  
   return (
     <div className="space-y-8">
       {/* Cards */}
@@ -36,7 +42,7 @@ export default function BuyerDashboardOverview() {
           </CardHeader>
 
           <CardContent>
-            <h2 className="text-4xl font-bold">{stats.totalOrders}</h2>
+            <h2 className="text-4xl font-bold">{orders?.length || 0}</h2>
             <p className="text-sm text-muted-foreground mt-2">
               Orders placed so far
             </p>
@@ -65,7 +71,7 @@ export default function BuyerDashboardOverview() {
 
           <CardContent>
             <h2 className="text-4xl font-bold">
-              {recentPurchases.length}
+              {orders?.length || 0}
             </h2>
 
             <p className="text-sm text-muted-foreground mt-2">
@@ -83,15 +89,15 @@ export default function BuyerDashboardOverview() {
 
         <CardContent>
           <div className="space-y-4">
-            {recentPurchases.map((product) => (
+            {orders.map((product) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="flex items-center justify-between border-b pb-4 last:border-none"
               >
                 <div>
-                  <h3 className="font-medium">{product.name}</h3>
+                  <h3 className="font-medium">{product.productName}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Product ID #{product.id}
+                    Product ID #{product.productId}
                   </p>
                 </div>
 

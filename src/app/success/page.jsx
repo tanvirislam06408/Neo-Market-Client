@@ -38,14 +38,16 @@ export default async function Success({ searchParams }) {
       productId,
       "paymentStatus": "paid",
       "orderStatus": "processing",
-       transactionId
+      transactionId
       ,
       buyerInfo: {
         customerEmail,
         user: user?.id,
         userName: user?.name
       },
-      sellerInfo: product.sellerInfo
+      sellerInfo: product.sellerInfo,
+      productName: product.title,
+      price: product.price
 
     }
 

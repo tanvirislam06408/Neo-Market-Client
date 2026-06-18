@@ -15,35 +15,45 @@ import {
 } from "@/components/ui/table";
 
 import { Badge } from "@/components/ui/badge";
+import { serverFetch } from "@/lib/core/server";
+import { getUserSession } from "@/lib/core/session";
 
-const payments = [
-  {
-    id: "TXN-1001",
-    amount: "$280",
-    date: "Jun 17, 2026",
-    status: "Completed",
-  },
-  {
-    id: "TXN-1002",
-    amount: "$95",
-    date: "Jun 15, 2026",
-    status: "Pending",
-  },
-  {
-    id: "TXN-1003",
-    amount: "$140",
-    date: "Jun 10, 2026",
-    status: "Failed",
-  },
-  {
-    id: "TXN-1004",
-    amount: "$60",
-    date: "Jun 07, 2026",
-    status: "Completed",
-  },
-];
+// const payments = [
+//   {
+//     id: "TXN-1001",
+//     amount: "$280",
+//     date: "Jun 17, 2026",
+//     status: "Completed",
+//   },
+//   {
+//     id: "TXN-1002",
+//     amount: "$95",
+//     date: "Jun 15, 2026",
+//     status: "Pending",
+//   },
+//   {
+//     id: "TXN-1003",
+//     amount: "$140",
+//     date: "Jun 10, 2026",
+//     status: "Failed",
+//   },
+//   {
+//     id: "TXN-1004",
+//     amount: "$60",
+//     date: "Jun 07, 2026",
+//     status: "Completed",
+//   },
+// ];
 
-export default function PaymentHistoryPage() {
+
+
+export default async function PaymentHistoryPage() {
+  const user = await getUserSession();
+
+  const payments = await serverFetch(
+    `/api/orders?userId=${user.id}`
+  );
+
   return (
     <div className="space-y-6">
       <div>
@@ -72,14 +82,14 @@ export default function PaymentHistoryPage() {
 
             <TableBody>
               {payments.map((payment) => (
-                <TableRow key={payment.id}>
+                <TableRow key={payment._id}>
                   <TableCell className="font-medium">
-                    {payment.id}
+                    {payment.transactionId}
                   </TableCell>
 
-                  <TableCell>{payment.amount}</TableCell>
+                  <TableCell>{payment.price}</TableCell>
 
-                  <TableCell>{payment.date}</TableCell>
+                  <TableCell>{payment.createdAt}</TableCell>
 
                   <TableCell>
                     <Badge
@@ -87,11 +97,11 @@ export default function PaymentHistoryPage() {
                         payment.status === "Completed"
                           ? "default"
                           : payment.status === "Pending"
-                          ? "secondary"
-                          : "destructive"
+                            ? "secondary"
+                            : "destructive"
                       }
                     >
-                      {payment.status}
+                      {payment.paymentStatus}
                     </Badge>
                   </TableCell>
                 </TableRow>
