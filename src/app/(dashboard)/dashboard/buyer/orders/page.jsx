@@ -1,3 +1,4 @@
+
 import {
   Table,
   TableBody,
@@ -9,21 +10,27 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import EmptyOrders from "@/components/dashboard/EmptyOrders";
+import OrderDetailsModal from "@/components/dashboard/d";
 import { getUserSession } from "@/lib/core/session";
 import { serverFetch } from "@/lib/core/server";
-import EmptyOrders from "@/components/dashboard/EmptyOrders";
+import Link from "next/link";
 
-export default async function MyOrdersPage() {
+export default async function OrderClient() {
   const user = await getUserSession();
 
-  const orders = await serverFetch(
-    `/api/orders?userId=${user.id}`
-  );
-
- 
+    const orders = await serverFetch(
+        `/api/orders?userId=${user.id}`
+    );
+  
   if (orders.length === 0) {
-     return <EmptyOrders/>
+    return <EmptyOrders />
   }
+
+
+
+
+
 
 
   return (
@@ -92,9 +99,7 @@ export default async function MyOrdersPage() {
                 </TableCell>
 
                 <TableCell className="flex justify-end gap-2">
-                  <Button variant="outline">
-                    Details
-                  </Button>
+                  <Link href={`/products/${order?.productId}`}><Button>View Details</Button></Link>
 
                   {order.orderStatus === "processing" && (
                     <Button variant="destructive">

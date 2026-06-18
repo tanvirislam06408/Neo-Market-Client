@@ -17,6 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { serverFetch } from "@/lib/core/server";
 import { getUserSession } from "@/lib/core/session";
+import EmptyPayments from "@/components/dashboard/e";
 
 
 
@@ -30,6 +31,10 @@ export default async function PaymentHistoryPage() {
     `/api/orders?userId=${user.id}`
   );
 
+      if(!payments || payments.length ===0){
+        return <EmptyPayments/>
+      }
+      console.log(payments);
       
   return (
     <div className="space-y-6">
