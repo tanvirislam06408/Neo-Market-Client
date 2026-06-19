@@ -22,6 +22,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import SignOut from "./SignOut";
 import ScrollHeader from "./ScrollHeader";
+import WishListIcon from "./WishListIcon";
 
 export default async function Navbar() {
   const user = await getUserSession();
@@ -114,7 +115,9 @@ export default async function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-4">
           {user ? (
-            <DropdownMenu>
+            <div className="flex items-center gap-5">
+              <WishListIcon/>
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
@@ -151,6 +154,7 @@ export default async function Navbar() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
           ) : (
             <Link href="/signIn">
               <Button>Login</Button>

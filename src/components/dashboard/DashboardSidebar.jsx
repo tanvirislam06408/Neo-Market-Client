@@ -133,6 +133,7 @@ export async function DashboardSidebar() {
 
 
   const user = await getUserSession()
+  
   const items = navItems[user?.role]
   return (
     <Sidebar>

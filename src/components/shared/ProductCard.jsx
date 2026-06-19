@@ -53,7 +53,7 @@ export default function ProductCard({ product ,user}) {
         </div>
 
         {/* Wishlist */}
-        <button className="absolute right-4 top-4 rounded-full bg-white p-2 shadow transition hover:bg-rose-50">
+        <button onClick={() => handleAddWishList(product)} className="absolute right-4 top-4 rounded-full bg-white p-2 shadow transition hover:bg-rose-50">
           <Heart className="h-5 w-5 text-rose-500" />
         </button>
       </div>

@@ -81,9 +81,7 @@ export default function ProductDetailsPage({ product }) {
               Buy Now
             </Button>
             </form>
-            <Button size="lg" variant="outline" className="rounded-full px-4">
-              <Heart className="h-5 w-5" />
-            </Button>
+            
           </div>
 
           {/* Specifications Information */}

@@ -1,11 +1,15 @@
+
 import EmptyWishlist from "@/components/dashboard/Empty";
 import WishlistClient from "@/components/dashboard/WishlistClient";
 import { wishList } from "@/lib/api/wishList";
 
 export default async function WishlistPage() {
   const wishlistData = await wishList();
-  console.log(wishList);
-  
+
+
+
+
+
   if(wishlistData.length ===0){
     return <EmptyWishlist/>
   }

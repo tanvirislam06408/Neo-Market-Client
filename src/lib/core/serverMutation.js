@@ -1,14 +1,15 @@
 'use server'
 const baseUrl = process.env.NEXT_PUBLIC_SERVER
 
-export const serverMutation = async (url, data) => {
+export const serverMutation = async (url, data = null , method='POST') => {
     const res = await fetch(`${baseUrl}${url}`, {
-        method: 'POST',
+        method: method,
         headers: {
             'content-type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: data && JSON.stringify(data)
     })
     const resData = await res.json();
     return resData;
 }
+

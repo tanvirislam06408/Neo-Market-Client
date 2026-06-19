@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Changed from redirect to useRouter
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -13,36 +14,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { redirect } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import dynamic from 'next/dynamic';
+
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import signupAnimation from "../../../../public/lottie/signup.json";
 
 const SignUpPage = () => {
+  const router = useRouter(); // Initialize Next.js router
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    image: "",
   });
-  const [roleState, setRoleState] = useState('')
+  const [roleState, setRoleState] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    if (error) setError(""); // Clear error when typing
+    if (error) setError(""); 
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    const { name, email, password, confirmPassword } = form;
+    setLoading(true);
+
+    const { name, email, password, confirmPassword, image } = form;
+
+    if (!roleState) {
+      setError("Please select a role (Buyer or Seller).");
+      setLoading(false);
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
+      setLoading(false);
       return;
     }
 
@@ -52,26 +65,43 @@ const SignUpPage = () => {
 
     if (!hasUpperCase || !hasNumber) {
       setError("Password must contain at least 1 uppercase letter and 1 number.");
+      setLoading(false);
       return;
     }
 
     try {
-      const {data : session, error: apiError} = await authClient.signUp.email({ name, email, password, role: roleState, status:'active' });
+      const { data: session, error: apiError } = await authClient.signUp.email({ 
+        name, 
+        email, 
+        password, 
+        role: roleState, 
+        image: image || undefined, // Passing the image URL field
+        status: 'active' 
+      });
+
       if (apiError) {
         setError(apiError.message || "An error occurred during sign up.");
+        setLoading(false);
         return;
       }
-      if(session?.user){
-        redirect('/')
+
+      if (session?.user || session) {
+        router.push('/'); // Safe programmatic navigation inside event handlers
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      console.error("Sign-up exception caught:", err);
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setLoading(false);
     }
   };
 
   const handleGoogleSignUp = async () => {
-    const data = await authClient.signIn.social({ provider: "google" });
-    console.log("Google Sign Up:", data);
+    try {
+      const data = await authClient.signIn.social({ provider: "google" });
+      console.log("Google Sign Up:", data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Google authentication failed.");
+    }
   };
 
   return (
@@ -87,7 +117,6 @@ const SignUpPage = () => {
             <h2 className="text-2xl font-bold tracking-tight">Join NeoMarket Today</h2>
             <p className="text-muted-foreground">Create an account to unlock exclusive deals, personalized recommendations, and a seamless shopping experience.</p>
           </div>
-          {/* Decorative background elements */}
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-primary/5 to-transparent z-0 pointer-events-none" />
         </div>
 
@@ -102,14 +131,14 @@ const SignUpPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive whitespace-pre-line">
                 {error}
               </div>
             )}
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1">
-                <label htmlFor="name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <label htmlFor="name" className="text-sm font-medium leading-none">
                   Name
                 </label>
                 <input
@@ -119,13 +148,13 @@ const SignUpPage = () => {
                   required
                   value={form.name}
                   onChange={handleChange}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                   placeholder="John Doe"
                 />
               </div>
 
               <div className="space-y-1">
-                <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <label htmlFor="email" className="text-sm font-medium leading-none">
                   Email
                 </label>
                 <input
@@ -135,14 +164,14 @@ const SignUpPage = () => {
                   required
                   value={form.email}
                   onChange={handleChange}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                   placeholder="you@example.com"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="image" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              <label htmlFor="image" className="text-sm font-medium leading-none">
                 Image URL
               </label>
               <input
@@ -151,14 +180,14 @@ const SignUpPage = () => {
                 type="text"
                 value={form.image}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                 placeholder="https://example.com/image.jpg"
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1">
-                <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <label htmlFor="password" className="text-sm font-medium leading-none">
                   Password
                 </label>
                 <div className="relative">
@@ -169,7 +198,7 @@ const SignUpPage = () => {
                     required
                     value={form.password}
                     onChange={handleChange}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                     placeholder="••••••••"
                   />
                   <button
@@ -183,7 +212,7 @@ const SignUpPage = () => {
               </div>
 
               <div className="space-y-1">
-                <label htmlFor="confirmPassword" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <label htmlFor="confirmPassword" className="text-sm font-medium leading-none">
                   Confirm
                 </label>
                 <div className="relative">
@@ -194,7 +223,7 @@ const SignUpPage = () => {
                     required
                     value={form.confirmPassword}
                     onChange={handleChange}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                     placeholder="••••••••"
                   />
                   <button
@@ -208,21 +237,23 @@ const SignUpPage = () => {
               </div>
             </div>
 
-            <Select onValueChange={value => { setRoleState(value) }}>
-              <SelectTrigger className="w-full mt-2">
-                <SelectValue placeholder="Select a role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Role</SelectLabel>
-                  <SelectItem value="buyer">Buyer</SelectItem>
-                  <SelectItem value="seller">Seller</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <div className="space-y-1">
+              <label className="text-sm font-medium leading-none">Role</label>
+              <Select onValueChange={(value) => setRoleState(value)}>
+                <SelectTrigger className="w-full mt-1">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="buyer">Buyer</SelectItem>
+                    <SelectItem value="seller">Seller</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
 
-            <Button type="submit" className="w-full mt-2 font-medium">
-              Sign Up
+            <Button type="submit" disabled={loading} className="w-full mt-2 font-medium">
+              {loading ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
 
@@ -239,6 +270,7 @@ const SignUpPage = () => {
             variant="outline"
             className="w-full font-medium"
             onClick={handleGoogleSignUp}
+            disabled={loading}
           >
             <svg className="mr-2 size-4" viewBox="0 0 24 24">
               <path

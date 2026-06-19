@@ -20,6 +20,7 @@ import { getUserSession } from "@/lib/core/session";
 import { Separator } from "@/components/ui/separator";
 import { Camera, Save, Lock, ShieldCheck } from "lucide-react";
 import ProfileInfo from "@/components/dashboard/ProfileInfo";
+import ChangePassword from "@/components/dashboard/ChangePassword";
 
 export default async function ProfilePage() {
   const user = await getUserSession();
@@ -86,51 +87,7 @@ export default async function ProfilePage() {
           <ProfileInfo user={user}/>
 
           {/* Change Password */}
-          <Card className="border-border/50 shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="w-5 h-5 text-muted-foreground" />
-                Change Password
-              </CardTitle>
-              <CardDescription>
-                Ensure your account is using a long, random password to stay secure.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="current_password">Current Password</Label>
-                <Input
-                  id="current_password"
-                  type="password"
-                  placeholder="Enter current password"
-                  className="max-w-md"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="new_password">New Password</Label>
-                <Input
-                  id="new_password"
-                  type="password"
-                  placeholder="Enter new password"
-                  className="max-w-md"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirm_password">Confirm Password</Label>
-                <Input
-                  id="confirm_password"
-                  type="password"
-                  placeholder="Confirm new password"
-                  className="max-w-md"
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="bg-muted/20 px-6 py-4 flex justify-end border-t">
-              <Button variant="secondary" className="gap-2">
-                Update Password
-              </Button>
-            </CardFooter>
-          </Card>
+          <ChangePassword/>
         </div>
       </div>
     </div>

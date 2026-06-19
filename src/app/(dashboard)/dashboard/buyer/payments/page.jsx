@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { serverFetch } from "@/lib/core/server";
 import { getUserSession } from "@/lib/core/session";
-import EmptyPayments from "@/components/dashboard/e";
+import EmptyPayments from "@/components/dashboard/EmptyPayments";
 
 
 
