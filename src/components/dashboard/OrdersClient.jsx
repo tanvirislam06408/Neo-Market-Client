@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
+import { cancelOrder } from "@/lib/actions/deleteOrder";
 
 
 function PaymentBadge({ status }) {
@@ -58,9 +59,8 @@ function DetailRow({ icon: Icon, label, value, mono, accent }) {
           {label}
         </p>
         <p
-          className={`text-sm break-all ${mono ? "font-mono text-xs" : "font-medium"} ${
-            accent ? "font-bold" : "text-gray-800"
-          }`}
+          className={`text-sm break-all ${mono ? "font-mono text-xs" : "font-medium"} ${accent ? "font-bold" : "text-gray-800"
+            }`}
           style={accent ? { color: "#3E5F47" } : {}}
         >
           {value}
@@ -276,6 +276,12 @@ function OrderDetailModal({ order, onClose }) {
 export default function OrdersClient({ orders }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+const handleCancelOrder=async(id)=>{
+  const deleteOrder=await cancelOrder(id)
+  console.log(deleteOrder);
+  
+}
+
   return (
     <>
       {/* Detail Modal */}
@@ -335,8 +341,9 @@ export default function OrdersClient({ orders }) {
                     <OrderBadge status={order.orderStatus} />
                   </TableCell>
 
-                  <TableCell className="text-right">
-                    <Button
+                  <TableCell className="text-right ">
+                   <div className="flex items-center gap-3.5">
+                     <Button
                       size="sm"
                       className="rounded-full text-xs"
                       style={{
@@ -348,7 +355,22 @@ export default function OrdersClient({ orders }) {
                     >
                       View Details
                     </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      className="rounded-full text-xs px-4"
+                      
+                      onClick={() => handleCancelOrder(order._id)}
+                    >
+                     
+                        {/* <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> */}
+                     
+                     Cancel
+                    </Button>
+                   </div>
                   </TableCell>
+
+
                 </TableRow>
               ))}
             </TableBody>
