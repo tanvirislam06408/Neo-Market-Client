@@ -324,7 +324,8 @@ const handleCancelOrder=async(id)=>{
           </div>
         </div>
 
-        <div className="rounded-xl border overflow-hidden shadow-sm">
+        {/* ── Desktop Table ── */}
+        <div className="hidden md:block rounded-xl border overflow-hidden shadow-sm">
           <Table>
             <TableHeader>
               <TableRow>
@@ -334,7 +335,7 @@ const handleCancelOrder=async(id)=>{
                 <TableHead>Price</TableHead>
                 <TableHead>Payment</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className={'text-center'}>Actions</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -365,8 +366,8 @@ const handleCancelOrder=async(id)=>{
                     <OrderBadge status={order.orderStatus} />
                   </TableCell>
 
-                  <TableCell className="flex items-center justify-center ">
-                   <div className="flex items-center gap-3.5">
+                  <TableCell className="text-center">
+                   <div className="flex items-center justify-center gap-3.5">
                      <Button
                       size="sm"
                       className="rounded-full text-xs"
@@ -416,12 +417,85 @@ const handleCancelOrder=async(id)=>{
                     </AlertDialog>
                    </div>
                   </TableCell>
-
-
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+        </div>
+
+        {/* ── Mobile Cards ── */}
+        <div className="md:hidden space-y-3">
+          {orders.map((order) => (
+            <div key={order._id} className="rounded-xl border bg-white shadow-sm p-4 space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="p-1.5 rounded-lg shrink-0" style={{ background: "rgba(62,95,71,0.08)" }}>
+                    <ShoppingBag className="w-3.5 h-3.5" style={{ color: "#3E5F47" }} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{order.productName}</p>
+                    <p className="font-mono text-xs text-gray-400 mt-0.5">
+                      #{order._id.slice(-8).toUpperCase()}
+                    </p>
+                  </div>
+                </div>
+                <span className="font-bold text-sm shrink-0" style={{ color: "#3E5F47" }}>
+                  ৳{order.price.toLocaleString()}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-gray-500">
+                <span>{order.sellerInfo.name}</span>
+                <span className="text-gray-300">|</span>
+                <PaymentBadge status={order.paymentStatus} />
+                <OrderBadge status={order.orderStatus} />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <Button
+                  size="sm"
+                  className="flex-1 rounded-full text-xs"
+                  style={{
+                    background: "linear-gradient(135deg,#3E5F47 0%,#2c4534 100%)",
+                    color: "#fff",
+                    border: "none",
+                  }}
+                  onClick={() => setSelectedOrder(order)}
+                >
+                  View Details
+                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button size="sm" variant="destructive" className="rounded-full text-xs px-4">
+                      Cancel
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <div className="mx-auto sm:mx-0 p-2.5 rounded-full bg-red-50 w-fit">
+                        <AlertTriangle className="w-5 h-5 text-red-500" />
+                      </div>
+                      <AlertDialogTitle>Cancel Order?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to cancel{" "}
+                        <span className="font-medium text-foreground">{order.productName}</span>
+                        ? This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Keep Order</AlertDialogCancel>
+                      <AlertDialogAction
+                        disabled={isCancelling}
+                        onClick={() => handleCancelOrder(order._id)}
+                      >
+                        {isCancelling ? "Cancelling..." : "Yes, Cancel"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>

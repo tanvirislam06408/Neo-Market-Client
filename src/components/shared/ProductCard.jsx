@@ -20,7 +20,7 @@ export default function ProductCard({ product ,user}) {
         userId: user?.id
       }
       const addInWishList = await addToWishList(insertedData);
-      console.log(addInWishList);
+      
       
 
       if (addInWishList?.insertedId) {
