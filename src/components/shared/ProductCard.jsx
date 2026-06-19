@@ -93,7 +93,7 @@ export default function ProductCard({ product ,user}) {
               name="productId"
               value={product._id}
             />
-            <Button type="submit" size="lg" className="flex-1 w-full rounded-full text-base font-medium">
+            <Button type="submit" size="lg" className="flex-1 w-full rounded-full bg-[#3E5F47] hover:bg-[#304B38] text-white text-sm font-medium transition-all duration-200">
               <ShoppingCart className="mr-2 h-5 w-5" />
               Buy Now
             </Button>
@@ -103,7 +103,7 @@ export default function ProductCard({ product ,user}) {
             onClick={() => handleAddWishList(product)}
             size="icon"
             variant="outline"
-            className="rounded-full"
+            className="rounded-full border-[#3E5F47]/25 bg-[#ECEAE5] hover:bg-[#dfddd8] text-[#3E5F47] transition-all duration-200"
           >
             <Heart className="h-5 w-5" />
           </Button>

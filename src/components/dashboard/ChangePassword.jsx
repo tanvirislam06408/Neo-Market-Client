@@ -118,7 +118,7 @@ const ChangePassword = () => {
         </CardContent>
 
         <CardFooter className="flex justify-end border-t bg-muted/20 px-6 py-4">
-          <Button type="submit" variant="secondary">
+          <Button type="submit" className="rounded-full bg-[#3E5F47] hover:bg-[#304B38] text-white px-7 transition-all duration-200">
             Update Password
           </Button>
         </CardFooter>

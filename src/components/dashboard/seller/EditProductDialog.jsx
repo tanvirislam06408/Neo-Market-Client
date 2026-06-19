@@ -35,7 +35,10 @@ import {
   Mail,
   Phone,
   Lock,
+  Leaf,
 } from "lucide-react";
+import { updateProduct } from "@/lib/actions/products";
+import toast from "react-hot-toast";
 
 const categories = [
   "Electronics",
@@ -50,23 +53,30 @@ const categories = [
 const conditions = ["Like New", "Good", "Fair"];
 
 const statusStyles = {
-  available: "bg-emerald-500",
-  sold: "bg-zinc-400",
-  pending: "bg-amber-500",
+  available: "bg-[#3E5F47] text-white",
+  sold: "bg-zinc-400 text-white",
+  pending: "bg-amber-500 text-white",
 };
 
-// Small reusable section label — keeps the green accent consistent
-// across every field group without repeating classes inline.
+const statusDotColors = {
+  available: "bg-emerald-400",
+  sold: "bg-zinc-400",
+  pending: "bg-amber-400",
+};
+
+// Reusable section label matching the NeoMarket uppercase-tracking style
 function SectionLabel({ icon: Icon, children }) {
   return (
-    <Label className="flex items-center gap-1.5 text-emerald-900/80 font-medium">
-      <Icon className="h-3.5 w-3.5 text-emerald-600" />
+    <Label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#3E5F47]">
+      <Icon className="h-3.5 w-3.5 shrink-0" />
       {children}
     </Label>
   );
 }
 
 export default function EditProductDialog({ product }) {
+
+
   const [category, setCategory] = useState(product.category);
   const [condition, setCondition] = useState(product.condition);
   const [status, setStatus] = useState(product.status);
@@ -87,7 +97,14 @@ export default function EditProductDialog({ product }) {
 
     console.log(updatedProduct);
 
-    // await serverMutation(`/api/products/${product._id}`, updatedProduct, "PATCH");
+    const res = await updateProduct(product._id, updatedProduct);
+    if (res.result.modifiedCount > 0) {
+      toast.success(res.message)
+    }
+    else{
+      toast.error(res.message)
+    }
+
   };
 
   return (
@@ -95,55 +112,65 @@ export default function EditProductDialog({ product }) {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="gap-1.5 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+          className="gap-2 rounded-full border-[#3E5F47]/30 bg-[#ECEAE5] text-[#3E5F47] hover:bg-[#dfddd8] hover:text-[#304B38] hover:border-[#3E5F47]/50 transition-all duration-200 text-xs font-semibold uppercase tracking-[0.15em]"
         >
           <Pencil className="h-3.5 w-3.5" />
           Edit
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-2xl p-0 overflow-hidden gap-0">
-        {/* Accent header strip */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-teal-400" />
+      <DialogContent className="sm:max-w-2xl md:p-10 overflow-hidden gap-0 rounded-[28px] border-0 shadow-2xl">
+        {/* Top accent bar — earthy green gradient */}
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#3E5F47] via-[#4d7359] to-[#6a9e7a]" />
 
         <form onSubmit={handleSubmit}>
-          <DialogHeader className="px-6 pt-5 pb-4 border-b border-emerald-100">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                <Pencil className="h-4.5 w-4.5 text-emerald-700" />
+          {/* Header */}
+          <DialogHeader className="px-7 pt-6 pb-5 border-b border-[#ECEAE5]">
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ECEAE5]">
+                <Leaf className="h-5 w-5 text-[#3E5F47]" />
               </div>
               <div>
-                <DialogTitle className="text-emerald-950">Edit Product</DialogTitle>
-                <DialogDescription>
-                  Update your product information. Images cannot be changed here.
+                <DialogTitle className="text-lg font-bold text-foreground tracking-tight">
+                  Edit Product
+                </DialogTitle>
+                <DialogDescription className="mt-0.5 text-sm text-muted-foreground">
+                  Update your listing details below. Images cannot be changed here.
                 </DialogDescription>
               </div>
             </div>
           </DialogHeader>
 
-          <div className="max-h-[65vh] overflow-y-auto px-6 py-6 space-y-7">
-            {/* Product details */}
+          {/* Scrollable body */}
+          <div className="max-h-[62vh] overflow-y-auto px-7 py-6 space-y-6 bg-white">
+            {/* ── Product Details ── */}
             <div className="space-y-5">
+              {/* Title */}
               <div className="space-y-2">
                 <SectionLabel icon={Tag}>Product Title</SectionLabel>
                 <Input
                   name="title"
                   defaultValue={product.title}
-                  placeholder="Product title"
-                  className="focus-visible:ring-emerald-500"
+                  placeholder="e.g. Sony WH-1000XM5 Headphones"
+                  className="rounded-xl border-[#ECEAE5] bg-[#ECEAE5]/40 focus-visible:ring-[#3E5F47] focus-visible:border-[#3E5F47] placeholder:text-muted-foreground/60 transition"
                 />
               </div>
 
+              {/* Category + Condition */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
                   <SectionLabel icon={Tag}>Category</SectionLabel>
                   <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger className="focus:ring-emerald-500">
+                    <SelectTrigger className="rounded-xl border-[#ECEAE5] bg-[#ECEAE5]/40 focus:ring-[#3E5F47] transition">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-2xl border-[#ECEAE5]">
                       {categories.map((item) => (
-                        <SelectItem key={item} value={item}>
+                        <SelectItem
+                          key={item}
+                          value={item}
+                          className="rounded-xl focus:bg-[#ECEAE5] focus:text-[#3E5F47]"
+                        >
                           {item}
                         </SelectItem>
                       ))}
@@ -154,12 +181,16 @@ export default function EditProductDialog({ product }) {
                 <div className="space-y-2">
                   <SectionLabel icon={Gauge}>Condition</SectionLabel>
                   <Select value={condition} onValueChange={setCondition}>
-                    <SelectTrigger className="focus:ring-emerald-500">
+                    <SelectTrigger className="rounded-xl border-[#ECEAE5] bg-[#ECEAE5]/40 focus:ring-[#3E5F47] transition">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-2xl border-[#ECEAE5]">
                       {conditions.map((item) => (
-                        <SelectItem key={item} value={item}>
+                        <SelectItem
+                          key={item}
+                          value={item}
+                          className="rounded-xl focus:bg-[#ECEAE5] focus:text-[#3E5F47]"
+                        >
                           {item}
                         </SelectItem>
                       ))}
@@ -168,43 +199,58 @@ export default function EditProductDialog({ product }) {
                 </div>
               </div>
 
+              {/* Price + Status */}
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <SectionLabel icon={DollarSign}>Price</SectionLabel>
+                  <SectionLabel icon={DollarSign}>Price (৳)</SectionLabel>
                   <Input
                     type="number"
                     name="price"
                     defaultValue={product.price}
-                    placeholder="Price"
-                    className="focus-visible:ring-emerald-500"
+                    placeholder="0.00"
+                    className="rounded-xl border-[#ECEAE5] bg-[#ECEAE5]/40 focus-visible:ring-[#3E5F47] focus-visible:border-[#3E5F47] transition"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <SectionLabel icon={Gauge}>Status</SectionLabel>
                   <Select value={status} onValueChange={setStatus}>
-                    <SelectTrigger className="focus:ring-emerald-500">
+                    <SelectTrigger className="rounded-xl border-[#ECEAE5] bg-[#ECEAE5]/40 focus:ring-[#3E5F47] transition">
                       <SelectValue>
                         <span className="flex items-center gap-2">
-                          <span className={`h-2 w-2 rounded-full ${statusStyles[status]}`} />
+                          <span
+                            className={`h-2 w-2 rounded-full ${statusDotColors[status]}`}
+                          />
                           {status.charAt(0).toUpperCase() + status.slice(1)}
                         </span>
                       </SelectValue>
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="available">
+                    <SelectContent className="rounded-2xl border-[#ECEAE5]">
+                      <SelectItem
+                        value="available"
+                        className="rounded-xl focus:bg-[#ECEAE5] focus:text-[#3E5F47]"
+                      >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 rounded-full bg-emerald-500" /> Available
+                          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                          Available
                         </span>
                       </SelectItem>
-                      <SelectItem value="sold">
+                      <SelectItem
+                        value="sold"
+                        className="rounded-xl focus:bg-[#ECEAE5] focus:text-[#3E5F47]"
+                      >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 rounded-full bg-zinc-400" /> Sold
+                          <span className="h-2 w-2 rounded-full bg-zinc-400" />
+                          Sold
                         </span>
                       </SelectItem>
-                      <SelectItem value="pending">
+                      <SelectItem
+                        value="pending"
+                        className="rounded-xl focus:bg-[#ECEAE5] focus:text-[#3E5F47]"
+                      >
                         <span className="flex items-center gap-2">
-                          <span className="h-2 w-2 rounded-full bg-amber-500" /> Pending
+                          <span className="h-2 w-2 rounded-full bg-amber-400" />
+                          Pending
                         </span>
                       </SelectItem>
                     </SelectContent>
@@ -212,73 +258,80 @@ export default function EditProductDialog({ product }) {
                 </div>
               </div>
 
+              {/* Description */}
               <div className="space-y-2">
                 <SectionLabel icon={FileText}>Description</SectionLabel>
                 <Textarea
-                  rows={5}
+                  rows={4}
                   name="description"
                   defaultValue={product.description}
-                  placeholder="Product description"
-                  className="focus-visible:ring-emerald-500"
+                  placeholder="Describe your item — condition details, included accessories, etc."
+                  className="rounded-xl border-[#ECEAE5] bg-[#ECEAE5]/40 focus-visible:ring-[#3E5F47] focus-visible:border-[#3E5F47] resize-none placeholder:text-muted-foreground/60 transition"
                 />
               </div>
             </div>
 
-            {/* Seller info — visually separated as a read-only block */}
-            <div className="rounded-lg border border-emerald-100 bg-emerald-50/50 p-4 space-y-3">
-              <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-emerald-700">
+            {/* ── Seller Info (read-only) ── */}
+            <div className="rounded-[20px] bg-[#ECEAE5]/60 border border-[#ECEAE5] p-5 space-y-4">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#3E5F47]">
                 <Lock className="h-3 w-3" />
                 Seller Information &middot; Read only
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-1.5">
-                  <Label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Label className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                     <User className="h-3 w-3" /> Name
                   </Label>
                   <Input
                     name="sellerName"
                     defaultValue={product.sellerInfo.name}
                     disabled
-                    className="bg-white/70"
+                    className="rounded-xl bg-white/70 border-transparent text-sm"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Label className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                     <Mail className="h-3 w-3" /> Email
                   </Label>
                   <Input
                     name="sellerEmail"
                     defaultValue={product.sellerInfo.email}
                     disabled
-                    className="bg-white/70"
+                    className="rounded-xl bg-white/70 border-transparent text-sm"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Label className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                     <Phone className="h-3 w-3" /> Phone
                   </Label>
                   <Input
                     name="sellerPhone"
                     defaultValue={product.sellerInfo.phone}
                     disabled
-                    className="bg-white/70"
+                    className="rounded-xl bg-white/70 border-transparent text-sm"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <DialogFooter className="px-6 py-4 border-t border-emerald-100 bg-emerald-50/30">
+          {/* Footer */}
+          <DialogFooter className="px-7 py-5 border-t border-[#ECEAE5] bg-[#ECEAE5]/30 flex gap-3">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button
+                variant="outline"
+                className="rounded-full border-[#3E5F47]/20 bg-white text-[#3E5F47] hover:bg-[#ECEAE5] hover:text-[#304B38] transition-all duration-200"
+              >
+                Cancel
+              </Button>
             </DialogClose>
 
             <Button
               type="submit"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="rounded-full bg-[#3E5F47] hover:bg-[#304B38] text-white px-7 transition-all duration-200"
             >
               Update Product
             </Button>

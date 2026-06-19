@@ -158,6 +158,7 @@ export default function SellerOrders({ orders }) {
                     <Button
                       size="sm"
                       variant="outline"
+                      className="rounded-full border-[#3E5F47]/30 bg-[#ECEAE5] text-[#3E5F47] hover:bg-[#dfddd8] hover:text-[#304B38] transition-all duration-200"
                       onClick={() => handleView(order)}
                     >
                       View
@@ -167,6 +168,7 @@ export default function SellerOrders({ orders }) {
                       <>
                         <Button
                           size="sm"
+                          className="rounded-full bg-[#3E5F47] hover:bg-[#304B38] text-white transition-all duration-200"
                           onClick={() =>
                             handleStatusUpdate(order._id, "Accepted")
                           }
@@ -177,6 +179,7 @@ export default function SellerOrders({ orders }) {
                         <Button
                           size="sm"
                           variant="destructive"
+                          className="rounded-full"
                         >
                           Reject
                         </Button>

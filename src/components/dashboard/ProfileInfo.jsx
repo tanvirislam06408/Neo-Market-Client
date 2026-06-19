@@ -130,7 +130,7 @@ const ProfileInfo = ({ user }) => {
                 </CardContent>
 
                 <CardFooter className="flex justify-end border-t px-6 py-4">
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} className="rounded-full bg-[#3E5F47] hover:bg-[#304B38] text-white px-7 transition-all duration-200">
                         <Save className="w-4 h-4 mr-2" />
                         {loading ? "Saving..." : "Save Changes"}
                     </Button>

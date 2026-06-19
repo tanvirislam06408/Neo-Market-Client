@@ -39,9 +39,8 @@ import {
 } from "@/components/ui/table";
 import EditProductDialog from "@/components/dashboard/seller/EditProductDialog";
 
-export default function MyProductsPage({ productData }) {
-  const [products] = useState(productData);
-
+export default function MyProductsPage({ productData:products }) {
+  
   return (
     <div className="space-y-8">
       {/* Header */}

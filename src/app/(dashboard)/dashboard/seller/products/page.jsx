@@ -6,7 +6,7 @@ import MyProductsPage from './MyProductsPage';
 const ProductDashboard = async () => {
     const user = await getUserSession();
     const productData = await protectedFetch(`/api/seller-product?id=${user.id}`)
-   
+    
     
     return (
         <div>

@@ -37,12 +37,12 @@ export default function ProductDetailsPage({ product }) {
           {/* Tags: Category & Condition */}
           <div className="flex flex-wrap gap-3">
             {product.category && (
-              <span className="rounded-full bg-orange-100 px-4 py-1 text-sm font-medium text-orange-700">
+              <span className="rounded-full bg-[#ECEAE5] px-4 py-1 text-sm font-medium text-[#3E5F47]">
                 {product.category}
               </span>
             )}
             {product.condition && (
-              <span className="rounded-full bg-green-100 px-4 py-1 text-sm font-medium text-green-700">
+              <span className="rounded-full bg-[#3E5F47]/10 px-4 py-1 text-sm font-medium text-[#3E5F47]">
                 Condition: {product.condition}
               </span>
             )}
@@ -76,7 +76,7 @@ export default function ProductDetailsPage({ product }) {
                 name="productId"
                 value={product._id}
               />
-              <Button type="submit" size="lg" className="flex-1 w-full rounded-full text-base font-medium">
+              <Button type="submit" size="lg" className="flex-1 w-full rounded-full bg-[#3E5F47] hover:bg-[#304B38] text-white text-sm font-medium transition-all duration-200">
               <ShoppingCart className="mr-2 h-5 w-5" />
               Buy Now
             </Button>
