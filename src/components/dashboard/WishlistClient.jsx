@@ -4,7 +4,6 @@ import Image from "next/image";
 import { ShoppingCart, Trash2, X, MapPin, Clock, Shield, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
-import { toast } from "sonner";
 import { deleteItems } from "@/lib/actions/wishlist";
 import {
   AlertDialog,
@@ -18,15 +17,15 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimatedDiv";
+import toast from "react-hot-toast";
 
 function Row({ label, value, highlight, truncate }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <span className="text-xs text-gray-500 shrink-0">{label}</span>
       <span
-        className={`text-sm text-right ${
-          highlight ? "font-bold" : "font-medium text-gray-700"
-        } ${truncate ? "truncate max-w-[180px]" : ""}`}
+        className={`text-sm text-right ${highlight ? "font-bold" : "font-medium text-gray-700"
+          } ${truncate ? "truncate max-w-[180px]" : ""}`}
         style={highlight ? { color: "#3E5F47" } : {}}
       >
         {value}
@@ -177,22 +176,26 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
   );
 }
 
-export default function WishlistClient({ wishlist}) {
+export default function WishlistClient({ wishlist }) {
   const [modalItem, setModalItem] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const formRef = useRef(null);
 
-    const handleRemove = async (id) => {
-      try {
-        setIsDeleting(true);
-        await deleteItems(id);
+  const handleRemove = async (id) => {
+    try {
+      setIsDeleting(true);
+      const res = await deleteItems(id);
+      if (res.deletedCount) {
         toast.success("Item removed from wishlist");
-      } catch (err) {
-        toast.error(err);
-      } finally {
-        setIsDeleting(false);
+
       }
-    };
+
+    } catch (err) {
+      toast.error(err);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const openModal = (item) => setModalItem(item);
   const closeModal = () => setModalItem(null);

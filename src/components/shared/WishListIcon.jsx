@@ -4,7 +4,6 @@ import Link from "next/link";
 
 export default async function WishlistIcon () {
     const wishListCount=await wishList()
-    console.log(wishListCount.length);
     const count=wishListCount.length
   return (
     <Link href={'/dashboard/buyer/wishlist'} className="relative inline-flex">
