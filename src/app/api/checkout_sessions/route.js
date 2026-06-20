@@ -24,7 +24,7 @@ export async function POST(req) {
           quantity: 1,
 
           price_data: {
-            currency: "usd",
+            currency: "bdt",
 
             // price in cents
             unit_amount: product.price * 100,
