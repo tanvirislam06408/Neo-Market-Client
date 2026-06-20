@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // Changed from redirect to useRouter
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -10,18 +10,18 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import { Eye, EyeOff } from "lucide-react";
 import dynamic from 'next/dynamic';
+import { motion } from "framer-motion";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import signupAnimation from "../../../../public/lottie/signup.json";
 
 const SignUpPage = () => {
-  const router = useRouter(); // Initialize Next.js router
+  const router = useRouter();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -59,7 +59,6 @@ const SignUpPage = () => {
       return;
     }
 
-    // Basic validation: 1 uppercase, 1 number
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /\d/.test(password);
 
@@ -75,7 +74,7 @@ const SignUpPage = () => {
         email, 
         password, 
         role: roleState, 
-        image: image || undefined, // Passing the image URL field
+        image: image || undefined,
         status: 'active' 
       });
 
@@ -86,7 +85,7 @@ const SignUpPage = () => {
       }
 
       if (session?.user || session) {
-        router.push('/'); // Safe programmatic navigation inside event handlers
+        router.push('/');
       }
     } catch (err) {
       console.error("Sign-up exception caught:", err);
@@ -106,10 +105,19 @@ const SignUpPage = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8 lg:py-12">
-      <div className="w-full max-w-5xl overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col md:flex-row-reverse">
-        
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="w-full max-w-5xl overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col md:flex-row-reverse"
+      >
         {/* Lottie Animation Side */}
-        <div className="hidden md:flex flex-col items-center justify-center bg-muted/40 p-8 md:w-1/2 relative overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="hidden md:flex flex-col items-center justify-center bg-muted/40 p-8 md:w-1/2 relative overflow-hidden"
+        >
           <div className="w-full max-w-[400px] relative z-10">
             <Lottie animationData={signupAnimation} loop={true} />
           </div>
@@ -118,29 +126,44 @@ const SignUpPage = () => {
             <p className="text-muted-foreground">Create an account to unlock exclusive deals, personalized recommendations, and a seamless shopping experience.</p>
           </div>
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-primary/5 to-transparent z-0 pointer-events-none" />
-        </div>
+        </motion.div>
 
         {/* Form Side */}
-        <div className="w-full md:w-1/2 p-8 sm:p-12 space-y-6 flex flex-col justify-center">
-          <div className="text-center md:text-left space-y-1">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="w-full md:w-1/2 p-8 sm:p-12 space-y-6 flex flex-col justify-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="text-center md:text-left space-y-1"
+          >
             <h1 className="text-3xl font-bold tracking-tight">Sign Up</h1>
-            <p className="text-sm text-muted-foreground">
-              Create an account to get started.
-            </p>
-          </div>
+            <p className="text-sm text-muted-foreground">Create an account to get started.</p>
+          </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive whitespace-pre-line">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-md bg-destructive/15 p-3 text-sm text-destructive whitespace-pre-line"
+              >
                 {error}
-              </div>
+              </motion.div>
             )}
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-1">
-                <label htmlFor="name" className="text-sm font-medium leading-none">
-                  Name
-                </label>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-1"
+              >
+                <label htmlFor="name" className="text-sm font-medium leading-none">Name</label>
                 <input
                   id="name"
                   name="name"
@@ -151,12 +174,15 @@ const SignUpPage = () => {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                   placeholder="John Doe"
                 />
-              </div>
+              </motion.div>
 
-              <div className="space-y-1">
-                <label htmlFor="email" className="text-sm font-medium leading-none">
-                  Email
-                </label>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45 }}
+                className="space-y-1"
+              >
+                <label htmlFor="email" className="text-sm font-medium leading-none">Email</label>
                 <input
                   id="email"
                   name="email"
@@ -167,13 +193,16 @@ const SignUpPage = () => {
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                   placeholder="you@example.com"
                 />
-              </div>
+              </motion.div>
             </div>
 
-            <div className="space-y-1">
-              <label htmlFor="image" className="text-sm font-medium leading-none">
-                Image URL
-              </label>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="space-y-1"
+            >
+              <label htmlFor="image" className="text-sm font-medium leading-none">Image URL</label>
               <input
                 id="image"
                 name="image"
@@ -183,13 +212,16 @@ const SignUpPage = () => {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-colors"
                 placeholder="https://example.com/image.jpg"
               />
-            </div>
+            </motion.div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-1">
-                <label htmlFor="password" className="text-sm font-medium leading-none">
-                  Password
-                </label>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 }}
+                className="space-y-1"
+              >
+                <label htmlFor="password" className="text-sm font-medium leading-none">Password</label>
                 <div className="relative">
                   <input
                     id="password"
@@ -209,12 +241,15 @@ const SignUpPage = () => {
                     {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="space-y-1">
-                <label htmlFor="confirmPassword" className="text-sm font-medium leading-none">
-                  Confirm
-                </label>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="space-y-1"
+              >
+                <label htmlFor="confirmPassword" className="text-sm font-medium leading-none">Confirm</label>
                 <div className="relative">
                   <input
                     id="confirmPassword"
@@ -234,10 +269,15 @@ const SignUpPage = () => {
                     {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
-            <div className="space-y-1">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.65 }}
+              className="space-y-1"
+            >
               <label className="text-sm font-medium leading-none">Role</label>
               <Select onValueChange={(value) => setRoleState(value)}>
                 <SelectTrigger className="w-full mt-1">
@@ -250,57 +290,62 @@ const SignUpPage = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-            </div>
+            </motion.div>
 
-            <Button type="submit" disabled={loading} className="w-full mt-2 font-medium">
-              {loading ? "Signing Up..." : "Sign Up"}
-            </Button>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <Button type="submit" disabled={loading} className="w-full mt-2 font-medium">
+                {loading ? "Signing Up..." : "Sign Up"}
+              </Button>
+            </motion.div>
           </form>
 
-          <div className="relative my-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.75 }}
+            className="relative my-4"
+          >
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-card px-2 text-muted-foreground">or continue with</span>
             </div>
-          </div>
+          </motion.div>
 
-          <Button
-            variant="outline"
-            className="w-full font-medium"
-            onClick={handleGoogleSignUp}
-            disabled={loading}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
           >
-            <svg className="mr-2 size-4" viewBox="0 0 24 24">
-              <path
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                fill="#4285F4"
-              />
-              <path
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                fill="#34A853"
-              />
-              <path
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                fill="#EA4335"
-              />
-            </svg>
-            Google
-          </Button>
+            <Button variant="outline" className="w-full font-medium" onClick={handleGoogleSignUp} disabled={loading}>
+              <svg className="mr-2 size-4" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+              </svg>
+              Google
+            </Button>
+          </motion.div>
 
-          <p className="text-center text-sm text-muted-foreground pt-4">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.85 }}
+            className="text-center text-sm text-muted-foreground pt-4"
+          >
             Already have an account?{" "}
             <Link href="/signIn" className="font-medium text-primary hover:underline transition-all">
               Sign In
             </Link>
-          </p>
-        </div>
-      </div>
+          </motion.p>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

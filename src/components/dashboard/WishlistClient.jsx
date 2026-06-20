@@ -17,8 +17,8 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimatedDiv";
 
-// ─── Helper Row ────────────────────────────────────────────────────────────────
 function Row({ label, value, highlight, truncate }) {
   return (
     <div className="flex items-center justify-between gap-3">
@@ -35,7 +35,6 @@ function Row({ label, value, highlight, truncate }) {
   );
 }
 
-// ─── Checkout Confirmation Modal ───────────────────────────────────────────────
 function CheckoutModal({ item, onConfirm, onCancel }) {
   const quantity = 1;
   const total = item.price * quantity;
@@ -69,7 +68,6 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
         }
       `}</style>
 
-      {/* Backdrop */}
       <div
         className="checkout-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
         style={{
@@ -79,7 +77,6 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
         }}
         onClick={(e) => e.target === e.currentTarget && onCancel()}
       >
-        {/* Card */}
         <div
           className="checkout-modal-card relative w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
           style={{
@@ -87,7 +84,6 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
             border: "1px solid rgba(62,95,71,0.14)",
           }}
         >
-          {/* Close button */}
           <button
             onClick={onCancel}
             className="absolute top-4 right-4 z-10 p-1.5 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-gray-700 transition-all duration-200 shadow-sm"
@@ -95,7 +91,6 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
             <X className="w-4 h-4" />
           </button>
 
-          {/* ── Header ── */}
           <div
             className="px-6 pt-6 pb-5"
             style={{
@@ -107,58 +102,34 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
                 <ShoppingCart className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-white font-bold text-lg leading-tight">
-                  Order Summary
-                </h2>
-                <p className="text-white/65 text-xs mt-0.5">
-                  Review your order before payment
-                </p>
+                <h2 className="text-white font-bold text-lg leading-tight">Order Summary</h2>
+                <p className="text-white/65 text-xs mt-0.5">Review your order before payment</p>
               </div>
             </div>
           </div>
 
-          {/* ── Product Preview ── */}
           <div className="flex items-center gap-4 px-6 py-4 border-b border-gray-100">
             <div className="relative w-[68px] h-[68px] rounded-2xl overflow-hidden flex-shrink-0 shadow-md ring-2 ring-white">
-              <Image
-                src={item.images?.[0]}
-                alt={item.title}
-                fill
-                className="object-cover"
-              />
+              <Image src={item.images?.[0]} alt={item.title} fill className="object-cover" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-semibold text-gray-800 line-clamp-2 text-sm leading-snug">
-                {item.title}
-              </p>
+              <p className="font-semibold text-gray-800 line-clamp-2 text-sm leading-snug">{item.title}</p>
               <p className="text-xs text-gray-400 mt-1">
-                Sold by:{" "}
-                <span className="text-gray-600 font-medium">
-                  {item.sellerInfo?.name ?? "NeoMarket Seller"}
-                </span>
+                Sold by: <span className="text-gray-600 font-medium">{item.sellerInfo?.name ?? "NeoMarket Seller"}</span>
               </p>
             </div>
           </div>
 
-          {/* ── Order Details ── */}
           <div className="px-6 py-4 space-y-3">
             <Row label="Product Name" value={item.title} truncate />
-            <Row
-              label="Unit Price"
-              value={`৳${item.price.toLocaleString()}`}
-            />
+            <Row label="Unit Price" value={`৳${item.price.toLocaleString()}`} />
             <Row label="Quantity" value={quantity} />
             <Row label="Delivery Charge" value="Free" />
             <div className="border-t border-dashed border-gray-200 pt-3 mt-1">
-              <Row
-                label="Total Amount"
-                value={`৳${total.toLocaleString()}`}
-                highlight
-              />
+              <Row label="Total Amount" value={`৳${total.toLocaleString()}`} highlight />
             </div>
           </div>
 
-          {/* ── Delivery Information ── */}
           <div
             className="mx-6 mb-4 rounded-2xl px-4 py-3 space-y-2"
             style={{
@@ -166,38 +137,21 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
               border: "1px solid rgba(62,95,71,0.13)",
             }}
           >
-            <p
-              className="text-[10px] font-bold uppercase tracking-widest mb-2"
-              style={{ color: "#3E5F47" }}
-            >
-              Delivery Information
-            </p>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "#3E5F47" }}>Delivery Information</p>
             <div className="flex items-start gap-2 text-xs text-gray-500">
               <Clock className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#3E5F47]" />
-              <span>
-                Estimated delivery:{" "}
-                <span className="font-medium text-gray-700">
-                  2–3 working days
-                </span>
-              </span>
+              <span>Estimated delivery: <span className="font-medium text-gray-700">2–3 working days</span></span>
             </div>
             <div className="flex items-start gap-2 text-xs text-gray-500">
               <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#3E5F47]" />
-              <span>
-                Secure payment via{" "}
-                <span className="font-medium text-gray-700">Stripe</span>
-              </span>
+              <span>Secure payment via <span className="font-medium text-gray-700">Stripe</span></span>
             </div>
             <div className="flex items-start gap-2 text-xs text-gray-500">
               <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#3E5F47]" />
-              <span>
-                Order confirmation sent to your{" "}
-                <span className="font-medium text-gray-700">email</span>
-              </span>
+              <span>Order confirmation sent to your <span className="font-medium text-gray-700">email</span></span>
             </div>
           </div>
 
-          {/* ── Actions ── */}
           <div className="px-6 pb-6 flex gap-3">
             <button
               onClick={onCancel}
@@ -223,9 +177,7 @@ function CheckoutModal({ item, onConfirm, onCancel }) {
   );
 }
 
-// ─── Main Wishlist Component ───────────────────────────────────────────────────
 export default function WishlistClient({ wishlist}) {
- 
   const [modalItem, setModalItem] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const formRef = useRef(null);
@@ -259,7 +211,6 @@ export default function WishlistClient({ wishlist}) {
 
   return (
     <>
-      {/* Hidden Stripe form — submitted programmatically on confirm */}
       {modalItem && (
         <form
           ref={formRef}
@@ -271,7 +222,6 @@ export default function WishlistClient({ wishlist}) {
         </form>
       )}
 
-      {/* Confirmation modal */}
       {modalItem && (
         <CheckoutModal
           item={modalItem}
@@ -280,90 +230,60 @@ export default function WishlistClient({ wishlist}) {
         />
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        {wishlist?.map((item) => (
-          <div
-            key={item._id}
-            className="rounded-2xl border bg-white shadow-sm overflow-hidden"
-          >
-            {/* Image */}
-            <div className="relative h-52 w-full">
-              <Image
-                src={item.images?.[0]}
-                alt={item.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            {/* Content */}
-            <div className="p-4 space-y-2">
-              <h2 className="font-semibold line-clamp-1">{item.title}</h2>
-
-              <p className="text-sm text-muted-foreground line-clamp-2">
-                {item.description}
-              </p>
-
-              <p className="text-primary font-bold text-lg">
-                ৳{item.price.toLocaleString()}
-              </p>
-
-              <p className="text-xs text-muted-foreground">
-                Seller: {item.sellerInfo?.name}
-              </p>
-
-              {/* Actions */}
-              <div className="flex gap-2 pt-3">
-                <Button
-                  type="button"
-                  size="lg"
-                  className="flex-1 w-full rounded-full text-base font-medium"
-                  onClick={() => openModal(item)}
-                >
-                  <ShoppingCart className="mr-2 h-5 w-5" />
-                  Checkout
-                </Button>
-
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
+      <StaggerContainer>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          {wishlist?.map((item) => (
+            <StaggerItem key={item._id}>
+              <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+                <div className="relative h-52 w-full">
+                  <Image src={item.images?.[0]} alt={item.title} fill className="object-cover" />
+                </div>
+                <div className="p-4 space-y-2">
+                  <h2 className="font-semibold line-clamp-1">{item.title}</h2>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+                  <p className="text-primary font-bold text-lg">৳{item.price.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground">Seller: {item.sellerInfo?.name}</p>
+                  <div className="flex gap-2 pt-3">
                     <Button
-                      size="icon"
-                      variant="outline"
-                      className="rounded-full"
+                      type="button"
+                      size="lg"
+                      className="flex-1 w-full rounded-full text-base font-medium"
+                      onClick={() => openModal(item)}
                     >
-                      <Trash2 className="w-4 h-4 text-red-500" />
+                      <ShoppingCart className="mr-2 h-5 w-5" />
+                      Checkout
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <div className="mx-auto sm:mx-0 p-2.5 rounded-full bg-red-50 w-fit">
-                        <AlertTriangle className="w-5 h-5 text-red-500" />
-                      </div>
-                      <AlertDialogTitle>Remove from Wishlist?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Are you sure you want to remove{" "}
-                        <span className="font-medium text-foreground">
-                          {item.title}
-                        </span>{" "}
-                        from your wishlist? This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        disabled={isDeleting}
-                        onClick={() => handleRemove(item._id)}
-                      >
-                        {isDeleting ? "Removing..." : "Yes, Remove"}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button size="icon" variant="outline" className="rounded-full">
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <div className="mx-auto sm:mx-0 p-2.5 rounded-full bg-red-50 w-fit">
+                            <AlertTriangle className="w-5 h-5 text-red-500" />
+                          </div>
+                          <AlertDialogTitle>Remove from Wishlist?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to remove <span className="font-medium text-foreground">{item.title}</span> from your wishlist? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction disabled={isDeleting} onClick={() => handleRemove(item._id)}>
+                            {isDeleting ? "Removing..." : "Yes, Remove"}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            </StaggerItem>
+          ))}
+        </div>
+      </StaggerContainer>
     </>
   );
 }

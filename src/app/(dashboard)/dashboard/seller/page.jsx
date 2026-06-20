@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/card";
 import { protectedFetch } from "@/lib/core/server";
 import { getUserSession } from "@/lib/core/session";
-
-
+import { FadeUp, StaggerContainer, StaggerItem } from "@/components/shared/AnimatedDiv";
 
 export default async function SellerDashboardOverview() {
   const user=await getUserSession();
@@ -63,45 +62,40 @@ const stats = [
   
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold">Seller Dashboard</h1>
+      <FadeUp>
+        <div>
+          <h1 className="text-3xl font-bold">Seller Dashboard</h1>
+          <p className="mt-2 text-muted-foreground">
+            Monitor your products, orders, and earnings.
+          </p>
+        </div>
+      </FadeUp>
 
-        <p className="mt-2 text-muted-foreground">
-          Monitor your products, orders, and earnings.
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <Card key={item.title}>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {item.title}
-                </CardTitle>
-
-                <div className={`rounded-full p-3 ${item.bg}`}>
-                  <Icon className={`h-5 w-5 ${item.color}`} />
-                </div>
-              </CardHeader>
-
-              <CardContent>
-                <div className="text-3xl font-bold">
-                  {item.value}
-                </div>
-
-                <p className="mt-1 text-xs text-muted-foreground">
-                 {item.description}
-                </p>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      <StaggerContainer>
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {stats.map((item) => {
+            const Icon = item.icon;
+            return (
+              <StaggerItem key={item.title}>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">
+                      {item.title}
+                    </CardTitle>
+                    <div className={`rounded-full p-3 ${item.bg}`}>
+                      <Icon className={`h-5 w-5 ${item.color}`} />
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold">{item.value}</div>
+                    <p className="mt-1 text-xs text-muted-foreground">{item.description}</p>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            );
+          })}
+        </div>
+      </StaggerContainer>
     </div>
   );
 }

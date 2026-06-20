@@ -2,6 +2,7 @@ import ProductCard from "@/components/shared/ProductCard";
 import ProductsPagination from "@/components/shared/ProductsPagination";
 import { serverFetch } from "@/lib/core/server";
 import { getUserSession } from "@/lib/core/session";
+import { FadeUp } from "@/components/shared/AnimatedDiv";
 
 export default async function ProductsPage({ searchParams }) {
   const params = await searchParams;
@@ -16,15 +17,17 @@ export default async function ProductsPage({ searchParams }) {
 
   return (
     <section className="container mx-auto px-4 py-20">
-      <div className="mb-10">
-        <h2 className="text-4xl font-bold">
-          Explore Products
-        </h2>
+      <FadeUp>
+        <div className="mb-10">
+          <h2 className="text-4xl font-bold">
+            Explore Products
+          </h2>
 
-        <p className="mt-2 text-muted-foreground">
-          Discover quality pre-owned items from trusted sellers.
-        </p>
-      </div>
+          <p className="mt-2 text-muted-foreground">
+            Discover quality pre-owned items from trusted sellers.
+          </p>
+        </div>
+      </FadeUp>
 
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products.map((product) => (

@@ -208,9 +208,9 @@ export default function MyProductsPage({ productData: products }) {
                           <Button
                             size="sm"
                             variant="destructive"
-                            className="rounded-full text-xs px-4"
+                            className="rounded-full text-xs px-4 py-4"
                           >
-                            Cancel
+                            Delete
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
