@@ -127,13 +127,19 @@ const SearchSellerProduct = () => {
 
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="electronics">Electronics</SelectItem>
-                <SelectItem value="gaming">Gaming</SelectItem>
-                <SelectItem value="furniture">Furniture</SelectItem>
-                <SelectItem value="sports">Sports</SelectItem>
+                <SelectItem value="Electronics">Electronics</SelectItem>
+                <SelectItem value="Gaming">Gaming</SelectItem>
+                <SelectItem value="Furniture">Furniture</SelectItem>
+                <SelectItem value="Sports">Sports</SelectItem>
+                <SelectItem value="Fashion">Fashion</SelectItem>
+                <SelectItem value="Musical Instruments">Musical Instruments</SelectItem>
+                <SelectItem value="Home Appliances"></SelectItem>
               </SelectContent>
             </Select>
           </div>
+
+
+
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-muted-foreground">

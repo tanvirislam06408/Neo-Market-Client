@@ -2,6 +2,7 @@ import SellerOrders from "@/components/dashboard/seller/SellerOrders";
 import { protectedFetch } from "@/lib/core/server";
 import { getUserSession } from "@/lib/core/session";
 import { FadeUp } from "@/components/shared/AnimatedDiv";
+import EmptyOrders from "@/components/dashboard/EmptyOrders";
 
 export default async function SellerOrdersPage() {
   const user=await getUserSession();

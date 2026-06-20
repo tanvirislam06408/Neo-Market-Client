@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { updateOrderStatus } from "@/lib/actions/orders";
 import toast from "react-hot-toast";
+import EmptyOrders from "./EmptyOrders";
 
 export default function SellerOrders({ orders, res }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -115,8 +116,13 @@ export default function SellerOrders({ orders, res }) {
 
       </div>
 
+
+
       {/* Table */}
-      <Card>
+      {orders.length === 0 ?(
+        <EmptyOrders/>
+      ) : (
+        <Card>
         <CardHeader>
           <CardTitle>Incoming Orders</CardTitle>
         </CardHeader>
@@ -196,6 +202,7 @@ export default function SellerOrders({ orders, res }) {
 
         </CardContent>
       </Card>
+      )}
 
       {/* Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
