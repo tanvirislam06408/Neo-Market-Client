@@ -123,6 +123,8 @@ export async function DashboardSidebar() {
   const user = await getUserSession()
   
   const items = navItems[user?.role]
+  console.log(items);
+  
   return (
     <Sidebar>
       <SidebarHeader className="p-4">

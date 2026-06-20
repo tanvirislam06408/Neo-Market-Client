@@ -9,6 +9,7 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import loginAnimation from "../../../../public/lottie/login.json";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const SignInPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,23 +18,55 @@ const SignInPage = () => {
   };
   
   const router=useRouter()
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
     const { email, password } = form;
-    const data = await authClient.signIn.email({ email, password });
-    console.log("Sign In Data:", data);
-    if(data.data.user){
-      router.push('/')
+
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      return;
     }
-  };
 
-  const handleGoogleSignIn = async() => {
-  const data = await authClient.signIn.social({
-    provider: "google",
-  });
-  console.log(data);
-  };
+    if (data?.user) {
+      toast.success("User signed in successfully!");
+      router.push("/");
+    }
+  } catch (err) {
+    console.error(err);
 
+    toast.error(
+      err?.message || "Something went wrong. Please try again."
+    );
+  }
+};
+
+const handleGoogleSignIn = async () => {
+  try {
+    const { data, error } = await authClient.signIn.social({
+      provider: "google",
+    });
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+
+    toast.error(
+      err?.message || "Failed to sign in with Google."
+    );
+  }
+};
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8 lg:py-12">
       <motion.div

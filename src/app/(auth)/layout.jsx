@@ -1,4 +1,5 @@
 import Navbar from "@/components/shared/Navbar";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -9,6 +10,7 @@ const AuthLayout = ({ children }) => {
       <div>
         <Navbar />
         {children}
+        <Toaster/>
       </div>
    
   );

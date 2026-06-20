@@ -97,7 +97,7 @@ export default async function PaymentHistoryPage() {
       <div className="md:hidden space-y-3">
         {payments.map((payment) => (
           <FadeUp key={payment._id}>
-            <div className="rounded-xl border bg-white shadow-sm p-4 space-y-3">
+            <div className="rounded-xl border bg-white shadow-sm p-1.5 space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="p-1.5 rounded-lg shrink-0" style={{ background: "rgba(62,95,71,0.08)" }}>
@@ -124,6 +124,10 @@ export default async function PaymentHistoryPage() {
           </FadeUp>
         ))}
       </div>
+
+
+
+     
     </div>
   );
 }
