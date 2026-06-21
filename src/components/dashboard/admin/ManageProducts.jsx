@@ -33,9 +33,10 @@ import { FadeUp } from "@/components/shared/AnimatedDiv";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 import DashboardPagination from "@/components/shared/DashboardPagination";
+import { adminDeleteProduct } from "@/lib/actions/products";
 
-export default function ManageProducts({ products: productsData }) {
-  const [products, setProducts] = useState(productsData || []);
+export default function ManageProducts({ products }) {
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -102,27 +103,31 @@ export default function ManageProducts({ products: productsData }) {
     setDeleteOpen(true);
   };
 
-  // Action: Execute Deletion
-  const handleDelete = () => {
-    if (!productToDelete) return;
-
-    console.log("delete product payload:", { productId: productToDelete._id });
-    // TODO: await fetch(`/api/products/${productToDelete._id}`, { method: "DELETE" })
-
-    setProducts((prev) => prev.filter((p) => p._id !== productToDelete._id));
-    toast.success(`Product "${productToDelete.title}" has been permanently deleted.`);
-    setDeleteOpen(false);
-    setProductToDelete(null);
-    if (selectedProduct?._id === productToDelete._id) {
-      setDetailsOpen(false);
-    }
-  };
 
   // Action: Open product detail dialog
   const handleViewDetails = (prod) => {
     setSelectedProduct(prod);
     setDetailsOpen(true);
   };
+
+
+
+  // delete product
+  const handleDeleteProduct = async () => {
+    const id = productToDelete?._id
+    const res = await adminDeleteProduct(id);
+    if (res.deletedCount > 0) {
+      toast.success('Delete Product Successfully !')
+      setDeleteOpen(false);
+
+      setProductToDelete(null);
+    }
+
+
+  }
+
+
+
 
   return (
     <div className="space-y-6">
@@ -411,14 +416,14 @@ export default function ManageProducts({ products: productsData }) {
             <Button variant="outline" className="rounded-full" onClick={() => setDeleteOpen(false)}>
               Cancel
             </Button>
-            <Button variant="destructive" className="rounded-full bg-red-600 text-white" onClick={handleDelete}>
+            <Button onClick={() => handleDeleteProduct(selectedProduct?._id)} variant="destructive" className="rounded-full bg-red-600 text-white" >
               Delete Listing
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-         
+
 
 
     </div>

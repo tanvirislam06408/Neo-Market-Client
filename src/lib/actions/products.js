@@ -23,3 +23,10 @@ export const deleteProduct=async(id)=>{
     revalidatePath('/dashboard/seller/products')
     return res;
 }
+
+
+export const adminDeleteProduct=async(id)=>{
+    const res=await serverMutation(`/delete-product?id=${id}`,null,'DELETE');
+    revalidatePath('/dashboard/admin/products')
+    return res;
+}
