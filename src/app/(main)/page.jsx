@@ -4,6 +4,7 @@ import HeroSection from '@/components/homepage/HeroSection';
 import MarketplaceStats from '@/components/homepage/MarketplaceStats';
 import SuccessStories from '@/components/homepage/SuccessStories';
 import TopRatedSellers from '@/components/homepage/TopRatedSellers';
+import WhySecondHand from '@/components/homepage/WhySecondHand';
 import React from 'react';
 
 const MainPage = () => {
@@ -15,6 +16,7 @@ const MainPage = () => {
             <SuccessStories/>
             <MarketplaceStats/>
             <TopRatedSellers/>
+            <WhySecondHand/>
         </div>
     );
 };
