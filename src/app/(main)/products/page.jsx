@@ -10,9 +10,14 @@ export default async function ProductsPage({ searchParams }) {
   const search = params?.search;
   const currentPage = Number(params.page) || 1;
 
-  const url = search ? `/api/products?search=${search}` : `/api/products?page=${currentPage}`
+  let url = search ? `/api/products?search=${search}` : `/api/products?page=${currentPage}`
 
-
+  if(params.sort){
+    url=`/api/products?sort=${params.sort}&page=${currentPage}`
+   
+    
+  }
+  
 
   const { products, totalPage } = await serverFetch(url);
 
