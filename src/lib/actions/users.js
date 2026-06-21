@@ -10,13 +10,20 @@ export const userStatusUpdate = async (data) => {
 }
 
 
-export const updateRole=async(data)=>{
-    const res=await serverMutation('/update-role',data,'PATCH');
+export const updateRole = async (data) => {
+    const res = await serverMutation('/update-role', data, 'PATCH');
     revalidatePath('/dashboard/admin/users')
     return res;
 }
 
-export const deleteUser=async(id)=>{
-    const res=await serverMutation(`/delete-user?id=${id}`,null,'DELETE');
+export const deleteUser = async (id) => {
+    const res = await serverMutation(`/delete-user?id=${id}`, null, 'DELETE');
     return res
+}
+
+
+export const updateProductStatus = async (data) => {
+    const res=await serverMutation('/updateStatus',data,'PATCH');
+    revalidatePath('/dashboard/admin/products')
+    return res;
 }

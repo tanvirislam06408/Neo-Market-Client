@@ -34,6 +34,7 @@ import { toast } from "react-hot-toast";
 import Image from "next/image";
 import DashboardPagination from "@/components/shared/DashboardPagination";
 import { adminDeleteProduct } from "@/lib/actions/products";
+import { updateProductStatus } from "@/lib/actions/users";
 
 export default function ManageProducts({ products }) {
 
@@ -59,42 +60,21 @@ export default function ManageProducts({ products }) {
     return matchesSearch && matchesStatus;
   });
 
-  // Action: Approve Product
-  const handleApprove = (id) => {
-    console.log("approve product payload:", { productId: id });
-    // TODO: await fetch(`/api/products/${id}/status`, { method: "PATCH", body: JSON.stringify({ status: "available" }) })
-
-    setProducts((prev) =>
-      prev.map((p) => {
-        if (p._id === id) {
-          toast.success(`Product "${p.title}" has been approved and listed!`);
-          return { ...p, status: "available", reports: 0 };
-        }
-        return p;
-      })
-    );
-    if (selectedProduct?._id === id) {
-      setSelectedProduct((prev) => ({ ...prev, status: "available" }));
-    }
-  };
 
   // Action: Reject Product
-  const handleReject = (id) => {
-    console.log("reject product payload:", { productId: id });
-    // TODO: await fetch(`/api/products/${id}/status`, { method: "PATCH", body: JSON.stringify({ status: "rejected" }) })
+  const handleReject = async (id, status) => {
 
-    setProducts((prev) =>
-      prev.map((p) => {
-        if (p._id === id) {
-          toast.error(`Product "${p.title}" has been rejected/unlisted.`);
-          return { ...p, status: "rejected" };
-        }
-        return p;
-      })
-    );
-    if (selectedProduct?._id === id) {
-      setSelectedProduct((prev) => ({ ...prev, status: "rejected" }));
+    const data = {
+      id,
+      status
     }
+    const res = await updateProductStatus(data);
+    if(res.matchedCount > 0){
+      setDetailsOpen(false);
+      toast.success(`product successfully update to ${status}`)
+    }
+    
+
   };
 
   // Action: Prompt Deletion
@@ -266,7 +246,7 @@ export default function ManageProducts({ products }) {
                             size="icon"
                             className="rounded-full hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-950/20"
                             title="Approve Listing"
-                            onClick={() => handleApprove(prod._id)}
+                            onClick={() => handleReject(prod._id, "available")}
                           >
                             <Check className="h-4.5 w-4.5 text-emerald-600" />
                           </Button>
@@ -278,9 +258,10 @@ export default function ManageProducts({ products }) {
                             size="icon"
                             className="rounded-full hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/20"
                             title="Reject/Unlist"
-                            onClick={() => handleReject(prod._id)}
+                            onClick={() => handleReject(prod._id, "rejected")}
                           >
                             <X className="h-4.5 w-4.5 text-orange-600" />
+
                           </Button>
                         )}
 
@@ -292,6 +273,7 @@ export default function ManageProducts({ products }) {
                           onClick={() => confirmDelete(prod)}
                         >
                           <Trash2 className="h-4.5 w-4.5 text-red-500" />
+
                         </Button>
                       </div>
                     </TableCell>
@@ -318,7 +300,9 @@ export default function ManageProducts({ products }) {
           {selectedProduct && (
             <div className="space-y-4 pt-2">
               <div className="flex gap-4">
-                <img
+                <Image
+                  width={50}
+                  height={50}
                   src={selectedProduct.images?.[0]}
                   alt={selectedProduct.title}
                   className="h-28 w-28 rounded-lg object-cover border"
@@ -368,7 +352,7 @@ export default function ManageProducts({ products }) {
                     <Button
                       size="sm"
                       className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white gap-1"
-                      onClick={() => handleApprove(selectedProduct._id)}
+                      onClick={() => handleReject(selectedProduct._id,"available")}
                     >
                       <Check className="h-3.5 w-3.5" />
                       Approve
@@ -379,9 +363,10 @@ export default function ManageProducts({ products }) {
                       size="sm"
                       variant="outline"
                       className="rounded-full text-orange-600 border-orange-200 hover:bg-orange-50 dark:hover:bg-orange-950/20 gap-1"
-                      onClick={() => handleReject(selectedProduct._id)}
+                      onClick={() => handleReject(selectedProduct._id,"rejected")}
                     >
                       <X className="h-3.5 w-3.5" />
+
                       Reject
                     </Button>
                   )}
