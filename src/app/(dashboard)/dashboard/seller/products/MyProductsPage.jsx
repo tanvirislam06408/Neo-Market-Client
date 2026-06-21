@@ -37,6 +37,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import SearchSellerProduct from "@/components/dashboard/seller/Search";
+import MobileProductCard from "@/components/dashboard/seller/MobileProductCard";
 
 export default function MyProductsPage({ productData: products }) {
   const [isCancelling, setIsCancelling] = useState(false);
@@ -73,7 +74,7 @@ export default function MyProductsPage({ productData: products }) {
       <SearchSellerProduct/>
 
       {/* Products */}
-      <Card className="rounded-3xl">
+      <Card className="rounded-3xl hidden md:block">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Package className="h-5 w-5" />
@@ -208,6 +209,28 @@ export default function MyProductsPage({ productData: products }) {
           )}
         </CardContent>
       </Card>
+
+      <div className="md:hidden space-y-3">
+        <div className="flex items-center gap-2 mb-4">
+          <Package className="h-5 w-5 text-muted-foreground" />
+          <h3 className="font-semibold text-lg">Product List</h3>
+        </div>
+        {products.length === 0 ? (
+          <div className="flex flex-col items-center py-16 text-center">
+            <Package className="mb-4 h-12 w-12 text-muted-foreground" />
+            <h3 className="text-lg font-semibold">No products found</h3>
+            <p className="mt-2 text-muted-foreground">Start by adding your first product.</p>
+          </div>
+        ) : (
+          products.map((product) => (
+            <MobileProductCard
+              key={product._id}
+              product={product}
+              onDelete={handleRemoveProduct}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }

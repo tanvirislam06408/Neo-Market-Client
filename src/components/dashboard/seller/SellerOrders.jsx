@@ -30,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import { updateOrderStatus } from "@/lib/actions/orders";
 import toast from "react-hot-toast";
 import EmptyOrders from "./EmptyOrders";
+import MobileOrderCard from "./MobileOrderCard";
 
 export default function SellerOrders({ orders, res }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -122,7 +123,8 @@ export default function SellerOrders({ orders, res }) {
       {orders.length === 0 ?(
         <EmptyOrders/>
       ) : (
-        <Card>
+        <>
+        <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>Incoming Orders</CardTitle>
         </CardHeader>
@@ -202,6 +204,18 @@ export default function SellerOrders({ orders, res }) {
 
         </CardContent>
       </Card>
+
+      <div className="md:hidden space-y-3">
+        {orders.map((order) => (
+          <MobileOrderCard
+            key={order._id}
+            order={order}
+            onView={handleView}
+            onStatusUpdate={handleStatusUpdate}
+          />
+        ))}
+      </div>
+      </>
       )}
 
       {/* Modal */}

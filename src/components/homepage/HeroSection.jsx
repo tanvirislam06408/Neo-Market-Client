@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowRight, Leaf, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FadeLeft, FadeRight, FadeUp, StaggerContainer, staggerItem } from "@/components/shared/AnimatedDiv";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -27,19 +28,23 @@ export default function HeroSection() {
               </p>
 
               <div className="mt-10 flex flex-wrap gap-4">
-                <Button
-                  className="h-14 rounded-full bg-[#3E5F47] px-8 hover:bg-[#304B38]"
-                >
-                  Browse Collection
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <Link href={'/products'}>
+                  <Button
+                    className="h-14 rounded-full bg-[#3E5F47] px-8 hover:bg-[#304B38]"
+                  >
+                    Browse Collection
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
 
-                <Button
-                  variant="secondary"
-                  className="h-14 rounded-full bg-[#ECEAE5] px-8 hover:bg-[#dfddd8]"
-                >
-                  Start Selling
-                </Button>
+                <Link href={'/categories'}>
+                  <Button
+                    variant="secondary"
+                    className="h-14 rounded-full bg-[#ECEAE5] px-8 hover:bg-[#dfddd8]"
+                  >
+                    Explore
+                  </Button>
+                </Link>
               </div>
             </div>
           </FadeLeft>
