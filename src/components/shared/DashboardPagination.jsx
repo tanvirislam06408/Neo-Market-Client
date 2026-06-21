@@ -10,10 +10,10 @@ import { FadeIn } from "@/components/shared/AnimatedDiv";
 
 export default function DashboardPagination({
   currentPage,
-  totalPage = 1,
+  totalPage,
 }) {
   return (
-    <FadeIn>
+    
       <Pagination>
         <PaginationContent>
           {currentPage > 1 && (
@@ -37,6 +37,6 @@ export default function DashboardPagination({
           )}
         </PaginationContent>
       </Pagination>
-    </FadeIn>
+   
   );
 }
