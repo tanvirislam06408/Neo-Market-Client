@@ -107,6 +107,11 @@ const navItems = {
       icon: "BarChart3",
     },
     {
+      name: "Payment History",
+      path: "/dashboard/admin/payments",
+      icon: "CreditCard",
+    },
+    {
       name: "Profile",
       path: "/dashboard/admin/profile",
       icon: "User",
