@@ -4,7 +4,8 @@ A full-featured second-hand marketplace built with Next.js. Users can browse, bu
 
 <img width="1536" height="1024" alt="ChatGPT Image Jun 22, 2026, 11_26_13 AM" src="https://github.com/user-attachments/assets/53cbfd4f-67f0-41c4-b10d-bf0996a7e7e4" />
 
-
+## live-site 
+https://neo-market-bd.vercel.app/ 
 
 ---
 
