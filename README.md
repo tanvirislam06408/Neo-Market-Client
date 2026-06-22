@@ -2,9 +2,9 @@
 
 A full-featured second-hand marketplace built with Next.js. Users can browse, buy, and sell pre-owned items with secure authentication, payment processing, and a real-time dashboard.
 
-![Project Screenshot]()
+<img width="1536" height="1024" alt="ChatGPT Image Jun 22, 2026, 11_26_13 AM" src="https://github.com/user-attachments/assets/53cbfd4f-67f0-41c4-b10d-bf0996a7e7e4" />
 
-*(Add a screenshot or banner image above)*
+
 
 ---
 
