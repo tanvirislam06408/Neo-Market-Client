@@ -137,7 +137,7 @@ export default async function Navbar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href={`/dashboard/buyer/profile`} className="flex items-center cursor-pointer w-full">
+                  <Link href={`/dashboard/${user.role}/profile`} className="flex items-center cursor-pointer w-full">
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </Link>

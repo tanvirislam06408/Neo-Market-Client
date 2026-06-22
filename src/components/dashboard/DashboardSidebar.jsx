@@ -75,7 +75,7 @@ const navItems = {
     },
     {
       name: "Profile",
-      path: "/dashboard/buyer/profile",
+      path: "/dashboard/seller/profile",
       icon: "User",
     },
   ],
@@ -108,7 +108,7 @@ const navItems = {
     },
     {
       name: "Profile",
-      path: "/dashboard/buyer/profile",
+      path: "/dashboard/admin/profile",
       icon: "User",
     },
   ],
